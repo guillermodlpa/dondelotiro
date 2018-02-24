@@ -94,37 +94,48 @@ export default class MapScreen extends Component {
     this.map.fitToElements(true);
   }
 
-  render () {
+  renderMap() {
     const markers = this.props.points.map(point => ({
       latitude: point.latitude,
       longitude: point.longitude,
-      title: 'Hey',
-      description: 'tomates',
+      title: point.establishmentType,
+      description: point.thrashType,
     }));
 
     return (
+      <MapView
+        style={styles.map}
+        showsUserLocation
+        initialRegion={{
+          latitude: this.props.userCoordinates.latitude,
+          longitude: this.props.userCoordinates.longitude,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }}
+        ref={ref => this.map = ref}
+      >
+        {markers.map((marker, i) => (
+          <Marker
+            key={i}
+            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+            title={marker.title}
+            description={marker.description}
+          >
+            <Image
+              style={{width: 60, height: 60}}
+              source={Images.cleanPointMakerImage}
+            />
+          </Marker>
+        ))}
+      </MapView>
+    )
+  }
+
+  render () {
+    return (
       <View style={styles.mainContainer}>
         <View style={styles.contentContainer}>
-          <MapView
-            style={styles.map}
-            showsUserLocation
-            initialRegion={{
-              latitude: this.props.userCoordinates.latitude,
-              longitude: this.props.userCoordinates.longitude,
-              latitudeDelta: 0.05,
-              longitudeDelta: 0.05,
-            }}
-            ref={ref => this.map = ref}
-          >
-            {markers.map((marker, i) => (
-              <Marker
-                key={i}
-                coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                title={marker.title}
-                description={marker.description}
-              />
-            ))}
-          </MapView>
+          {this.renderMap()}
 
           <View style={{ paddingLeft: 20, paddingRight: 20 }}>
             <Text style={styles.emoji}>
