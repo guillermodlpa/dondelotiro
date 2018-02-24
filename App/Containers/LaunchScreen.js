@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, Image, View, Button } from 'react-native'
+import { Button, Image, ScrollView, Text, View } from 'react-native'
 import { Images } from '../Themes'
 import Geolocation from 'react-native-geolocation-service'
+import { connect } from 'react-redux'
 import requestPermission, { PERMISSIONS } from '../Lib/request-permission'
-
+import TrashRedux from '../Redux/TrashRedux'
 // Styles
 import styles from './Styles/LaunchScreenStyles'
 
-export default class LaunchScreen extends Component {
+class LaunchScreen extends Component {
   constructor (props) {
     super(props)
 
@@ -16,6 +17,10 @@ export default class LaunchScreen extends Component {
 
   onLocationChanged (position) {
     console.tron.log(position)
+    this.props.setGeoPosition(
+      position.coords.latitude,
+      position.coords.longitude
+    )
   }
 
   componentDidMount () {
@@ -35,13 +40,13 @@ export default class LaunchScreen extends Component {
   render () {
     return (
       <View style={styles.mainContainer}>
-        <Image source={Images.background} style={styles.backgroundImage} resizeMode='stretch' />
+        <Image source={Images.background} style={styles.backgroundImage} resizeMode="stretch" />
         <ScrollView style={styles.container}>
           <View style={styles.centered}>
             <Image source={Images.logo} style={styles.logo} />
           </View>
 
-          <View style={styles.section} >
+          <View style={styles.section}>
             <Image source={Images.ready} />
             <Text style={styles.sectionText}>
               This probably isn't what your app is going to look like. Unless your designer handed you this screen and, in that case, congrats! You're ready to ship. For everyone else, this is where you'll see a live preview of your fully functioning app using Ignite.
@@ -55,3 +60,18 @@ export default class LaunchScreen extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.trash.isLoading,
+    isLoaded: state.trash.isLoaded,
+    error: state.trash.error
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  setGeoPosition: (latitude, longitude) => dispatch(TrashRedux.setGeoPosition(latitude, longitude)),
+  requestLocations: (trashTypes, geoPosition) => dispatch(TrashRedux.locationRequest(trashTypes, geoPosition))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LaunchScreen)
