@@ -21,7 +21,7 @@ const images = {
   backButton: require('../Images/Icons/back-button.png'),
   closeButton: require('../Images/Icons/close-button.png'),
 
-  cleanPointMakerImage: require('../Images/papelera.png'),
+  cleanPointMakerImage: require('../Images/recycling-bin.png'),
   batteryMakerImage: require('../Images/battery-purple-noun.png'),
   dogShitMakerImage: require('../Images/caca-purple.png'),
   whoopsMarkerImage: require('../Images/whoops.png'),

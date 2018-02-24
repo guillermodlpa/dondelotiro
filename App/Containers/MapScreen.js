@@ -26,12 +26,6 @@ const styles = StyleSheet.create({
   centered: {
     alignItems: 'center'
   },
-  emoji: {
-    ...ApplicationStyles.screen.sectionText,
-    fontSize: 30,
-    textAlign: 'left',
-    marginBottom: Metrics.baseMargin,
-  },
   map: {
     width: '100%',
     height: 350,
@@ -50,6 +44,7 @@ const styles = StyleSheet.create({
 
 const userFriendlyLabels = {
   batteries: 'Baterías',
+  battery_recycling_point: 'Contenedor',
   furniture: 'Muebles',
   clean_point: 'Punto Limpio',
   dog_shit_trash: 'Papelera con bolsas',
@@ -130,6 +125,7 @@ export class MapScreen extends Component {
             description={location.trashTypes.map(getUserFriendlyLabel).join(', ')}
             onSelect={() => this.handleSelectMarker(i)}
             onDeselect={() => this.handleDeelectMarker()}
+            zIndex={this.state.selectedLocation === i ? 999 : 0}
           >
             <Image
               resizeMode="contain"
@@ -149,23 +145,21 @@ export class MapScreen extends Component {
           {this.renderMap()}
 
           <ScrollView style={{ padding: 20 }}>
-            <Text style={styles.emoji}>
-              😊 👌
-            </Text>
-
             {this.props.locations.map((location, i) => {
               const distance = getRoundedDistance(location, this.props.geoPosition);
+              const labeledDistance = distance > 1000
+                ? `${parseInt(distance / 100, 10) / 10} km`
+                : `${distance} metros`
 
               return (
                 <View
                   key={i}
                   style={{
-                    paddingBottom: Metrics.baseMargin,
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
                     flex: 1,
                     flexDirection: 'row',
-                    opacity: this.state.selectedLocation == null || this.state.selectedLocation === i
-                        ? 1
-                        : 0.4
+                    backgroundColor: this.state.selectedLocation === i ? '#EF5411' : 'transparent',
                   }}
                 >
                   <TouchableOpacity
@@ -175,22 +169,27 @@ export class MapScreen extends Component {
                     onPress={() => this.handleListItemPress(location, i)}
                   >
                     <Text style={styles.sectionText}>
-                      {getUserFriendlyLabel(location.containerType)} a {distance} metros!
+                      {getUserFriendlyLabel(location.containerType)} a {labeledDistance}!
                     </Text>
                     <Text style={styles.subSectionText}>
                       {location.trashTypes.map(getUserFriendlyLabel).join(', ')}
                     </Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity onPress={() => this.handleOpenMapPress(location)}>
-                      <Image
-                        source={Images.mapPinImage}
-                        style={{width: 20, height: 20}}
-                      />
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => this.handleOpenMapPress(location)}
+                    style={{ justifyContent: 'center' }}
+                  >
+                    <Image
+                      source={Images.mapPinImage}
+                      style={{width: 20, height: 20}}
+                    />
+                  </TouchableOpacity>
                 </View>
               );
             })}
+
+            <View style={{ padding: 25 }} />
           </ScrollView>
         </View>
 
