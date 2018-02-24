@@ -66,6 +66,10 @@ class LaunchScreen extends Component {
       }
     }
 
+    if (!trashTypes.length) {
+      return
+    }
+
     this.props.locationsRequest(trashTypes, this.state.geoPosition)
   }
 
