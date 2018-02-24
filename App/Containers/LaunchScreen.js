@@ -103,15 +103,15 @@ class LaunchScreen extends Component {
               flexDirection: 'row',
               justifyContent: 'center'
             }}>
-              <TrashButton text="Muebles" icon="rocket" selected={this.state.trashTypes.furniture} onPress={() => this.toggle('furniture')} />
-              <TrashButton text="Electrónica" icon="rocket" selected={this.state.trashTypes.electronics} onPress={() => this.toggle('electronics')} />
+              <TrashButton text="Muebles" icon="archive" selected={this.state.trashTypes.furniture} onPress={() => this.toggle('furniture')} />
+              <TrashButton text="Electrónica" icon="desktop" selected={this.state.trashTypes.electronics} onPress={() => this.toggle('electronics')} />
             </View>
             <View style={{
               flexDirection: 'row',
               justifyContent: 'center'
             }}>
-              <TrashButton text="Pilas" icon="rocket" selected={this.state.trashTypes.batteries} onPress={() => this.toggle('batteries')} />
-              <TrashButton text="Caca" icon="rocket" selected={this.state.trashTypes.dogShit} onPress={() => this.toggle('dogShit')} />
+              <TrashButton text="Pilas" icon="bolt" selected={this.state.trashTypes.batteries} onPress={() => this.toggle('batteries')} />
+              <TrashButton text="Caca" icon="fire" selected={this.state.trashTypes.dogShit} onPress={() => this.toggle('dogShit')} />
             </View>
           </View>
         </View>
