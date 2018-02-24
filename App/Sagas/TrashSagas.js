@@ -14,7 +14,6 @@ export function* requestLocations(action) {
     switch (trashType) {
       case 'furniture':
       case 'electronics':
-      case 'batteries':
       case 'glass':
       case 'oil':
       case 'toxic':
@@ -38,8 +37,6 @@ export function* requestLocations(action) {
         break
     }
   })
-
-  console.tron.log(containerTypes)
 
   const bodyFormData = new FormData();
   bodyFormData.append('lat', geoPosition.latitude);
