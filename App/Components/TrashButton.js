@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { TouchableHighlight, Text, View } from 'react-native'
+import { TouchableHighlight, Text, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import { Colors, Fonts } from '../Themes'
@@ -8,7 +8,7 @@ import { Colors, Fonts } from '../Themes'
 export default class TrashButton extends React.Component {
     static propTypes = {
         onPress: PropTypes.func,
-        icon: PropTypes.string,
+        image: PropTypes.number,
         text: PropTypes.string,
         selected: PropTypes.bool
     }
@@ -32,7 +32,7 @@ export default class TrashButton extends React.Component {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <Icon name={this.props.icon} size={60} color="#fff" />
+                    <Image resizeMode='contain' source={this.props.image} style={{height: 60}} />
                     <Text style={{ marginTop: 5, color: '#fff' }}>{this.props.text}</Text>
                 </View>
             </TouchableHighlight>

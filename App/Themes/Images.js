@@ -27,6 +27,11 @@ const images = {
   whoopsMarkerImage: require('../Images/whoops.png'),
 
   mapPinImage: require('../Images/map-pin.png'),
+
+  menuFurniture: require('../Images/menu-furniture.png'),
+  menuElectronics: require('../Images/menu-electronics.png'),
+  menuBattery: require('../Images/menu-battery.png'),
+  menuPoop: require('../Images/menu-poop.png'),
 };
 
 export default images
