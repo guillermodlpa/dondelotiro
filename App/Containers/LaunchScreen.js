@@ -118,7 +118,7 @@ class LaunchScreen extends Component {
               justifyContent: 'center'
             }}>
               <TrashButton text="Pilas" image={Images.menuBattery} selected={this.state.trashTypes.batteries} onPress={() => this.toggle('batteries')} />
-              <TrashButton text="Caca" image={Images.menuPoop} selected={this.state.trashTypes.dogShit} onPress={() => this.toggle('dogShit')} />
+              <TrashButton text="Caca de perro" image={Images.menuPoop} selected={this.state.trashTypes.dogShit} onPress={() => this.toggle('dogShit')} />
             </View>
 
             <View style={{
