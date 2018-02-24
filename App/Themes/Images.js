@@ -20,10 +20,12 @@ const images = {
   hamburger: require('../Images/Icons/hamburger.png'),
   backButton: require('../Images/Icons/back-button.png'),
   closeButton: require('../Images/Icons/close-button.png'),
-  cleanPointMakerImage: require('../Images/cleanpoint.png'),
-  batteryMakerImage: require('../Images/battery.png'),
-  dogShitMakerImage: require('../Images/caca.png'),
+
+  cleanPointMakerImage: require('../Images/papelera.png'),
+  batteryMakerImage: require('../Images/battery-purple-noun.png'),
+  dogShitMakerImage: require('../Images/caca-purple.png'),
   whoopsMarkerImage: require('../Images/whoops.png'),
+
   mapPinImage: require('../Images/map-pin.png'),
 };
 

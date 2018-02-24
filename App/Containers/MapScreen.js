@@ -118,6 +118,7 @@ export class MapScreen extends Component {
             description={location.trashTypes.map(getUserFriendlyLabel).join(', ')}
           >
             <Image
+              resizeMode="contain"
               style={{width: 60, height: 60}}
               source={getMarkerImage(location.containerType)}
             />
