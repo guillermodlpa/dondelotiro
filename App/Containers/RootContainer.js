@@ -4,6 +4,7 @@ import ReduxNavigation from '../Navigation/ReduxNavigation'
 import { connect } from 'react-redux'
 import StartupActions from '../Redux/StartupRedux'
 import ReduxPersist from '../Config/ReduxPersist'
+import DondeLoTiroToast from '../Components/DondeLoTiroToast'
 
 // Styles
 import styles from './Styles/RootContainerStyles'
@@ -15,11 +16,23 @@ const barStyles = {
 };
 
 class RootContainer extends Component {
-  componentDidMount () {
+  state = { showThankYouToast: false };
+
+  componentDidMount() {
     // if redux persist is not active fire startup action
     if (!ReduxPersist.active) {
       this.props.startup()
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.screen === 'MapScreen' && this.props.screen === 'LaunchScreen') {
+      this.setState({ showThankYouToast: true });
+    }
+
+    setTimeout(() => {
+      this.setState({ showThankYouToast: false });
+    }, 10000);
   }
 
   render () {
@@ -27,6 +40,10 @@ class RootContainer extends Component {
       <View style={styles.applicationView}>
         <StatusBar barStyle={barStyles[this.props.screen] || barStyles.default} />
         <ReduxNavigation />
+
+        {this.state.showThankYouToast && (
+          <DondeLoTiroToast />
+        )}
       </View>
     )
   }

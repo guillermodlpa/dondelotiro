@@ -15,19 +15,29 @@ import { Colors, Fonts } from '../Themes'
  *
  */
 
-export default DondeLoTiroButton = (props) => (
-    <TouchableHighlight
-        {...props}
-        style={{
-            alignSelf: 'flex-end',
-            width: '100%',
-            padding: 20,
-            backgroundColor: props.secondary ? '#764682' : '#EF5411',
-        }}
-    >
-        {props.children}
-    </TouchableHighlight>
-);
+export default DondeLoTiroButton = (props) => {
+    const {
+        disabled,
+        children,
+        secondary,
+        ...restProps
+    } = props;
+
+    return (
+        <TouchableHighlight
+            {...restProps}
+            style={{
+                alignSelf: 'flex-end',
+                width: '100%',
+                padding: 20,
+                backgroundColor: secondary ? '#764682' : '#EF5411',
+                opacity: disabled ? 0.4 : 1,
+            }}
+        >
+            {children}
+        </TouchableHighlight>
+    );
+};
 
 DondeLoTiroButton.innerTextStyles = {
     textAlign: 'center',

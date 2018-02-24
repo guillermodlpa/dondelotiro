@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Button, Image, ScrollView, Text, View, ActivityIndicator } from 'react-native'
-import { Images } from '../Themes'
 import Geolocation from 'react-native-geolocation-service'
 import { connect } from 'react-redux'
+import Toast from 'react-native-root-toast';
+
+import { Images } from '../Themes'
 import requestPermission, { PERMISSIONS } from '../Lib/request-permission'
 import TrashRedux from '../Redux/TrashRedux'
 import DondeLoTiroButton from '../Components/DondeLoTiroButton'
@@ -24,12 +26,7 @@ class LaunchScreen extends Component {
       latitude: null,
       longitude: null
     },
-    trashTypes: {
-      furniture: false,
-      electronics: false,
-      batteries: false,
-      dogShit: false,
-    }
+    trashTypes: {}
   }
 
   onLocationChanged(position) {
@@ -67,6 +64,7 @@ class LaunchScreen extends Component {
     }
 
     if (!trashTypes.length) {
+      Toast.show('Elige un tipo de residuo 🙏')
       return
     }
 
@@ -87,7 +85,18 @@ class LaunchScreen extends Component {
     })
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isLoaded) {
+      this.setState(state => ({
+        ...state,
+        trashTypes: {},
+      }))
+    }
+  }
+
   render() {
+    const anyTrashTypeSelected = Object.values(this.state.trashTypes).filter(Boolean).length;
+
     return (
       <View style={styles.mainContainer}>
         <View style={{ flex: 1 }}>
@@ -115,7 +124,11 @@ class LaunchScreen extends Component {
             </View>
           </View>
         </View>
-        <DondeLoTiroButton onPress={() => this.requestLocations()}>
+
+        <DondeLoTiroButton
+          onPress={() => this.requestLocations()}
+          disabled={!anyTrashTypeSelected}
+        >
           <View style={{ flexDirection: 'column' }}>
             {(!this.props.isLoading ?
               <Text style={DondeLoTiroButton.innerTextStyles}>BUSCAR</Text> :
