@@ -105,9 +105,6 @@ class LaunchScreen extends Component {
           </View>
 
           <View>
-            <Text style={styles.sectionText}>
-              Selecciona los tipos de residuos
-            </Text>
             <View style={{
               flexDirection: 'row',
               justifyContent: 'center'
