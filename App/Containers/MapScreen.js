@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { ScrollView, Text, Image, View, StyleSheet } from 'react-native'
+import { ScrollView, Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
 import { connect } from 'react-redux'
 
@@ -109,6 +109,13 @@ export class MapScreen extends Component {
   };
   static defaultProps = {};
 
+  handleListItemPress = (location) => {
+    this.map.animateToCoordinate({
+      latitude: location.latitude,
+      longitude: location.longitude,
+    });
+  }
+
   renderMap() {
     return (
       <MapView
@@ -155,14 +162,18 @@ export class MapScreen extends Component {
               const distance = getRoundedDistance(location, this.props.geoPosition);
 
               return (
-                <View style={styles.container} key={i}>
+                <TouchableOpacity
+                  style={styles.container}
+                  key={i}
+                  onPress={() => this.handleListItemPress(location)}
+                >
                   <Text style={styles.sectionText}>
                     {getUserFriendlyLabel(location.containerType)} a {distance} metros!
                   </Text>
                   <Text style={styles.subSectionText}>
                     {location.trashTypes.map(getUserFriendlyLabel).join(', ')}
                   </Text>
-                </View>
+                </TouchableOpacity>
               );
             })}
           </ScrollView>
