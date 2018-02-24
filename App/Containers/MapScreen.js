@@ -85,6 +85,10 @@ export class MapScreen extends Component {
   };
   static defaultProps = {};
 
+  state = {
+    selectedLocation: null,
+  };
+
   handleListItemPress = (location) => {
     this.map.animateToCoordinate({
       latitude: location.latitude,
@@ -94,6 +98,13 @@ export class MapScreen extends Component {
 
   handleOpenMapPress = (location) => {
     openMap({ latitude: location.latitude, longitude: location.longitude });
+  }
+
+  handleSelectMarker = (index) => {
+    this.setState(state => ({ ...state, selectedLocation: index }))
+  }
+  handleDeelectMarker = () => {
+    this.setState(state => ({ ...state, selectedLocation: null }))
   }
 
   renderMap() {
@@ -116,6 +127,8 @@ export class MapScreen extends Component {
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}
             title={getUserFriendlyLabel(location.containerType)}
             description={location.trashTypes.map(getUserFriendlyLabel).join(', ')}
+            onSelect={() => this.handleSelectMarker(i)}
+            onDeselect={() => this.handleDeelectMarker()}
           >
             <Image
               resizeMode="contain"
@@ -149,10 +162,15 @@ export class MapScreen extends Component {
                     paddingBottom: Metrics.baseMargin,
                     flex: 1,
                     flexDirection: 'row',
+                    opacity: this.state.selectedLocation == null || this.state.selectedLocation === i
+                        ? 1
+                        : 0.6
                   }}
                 >
                   <TouchableOpacity
-                    style={{ flex: 1 }}
+                    style={{
+                      flex: 1,
+                    }}
                     onPress={() => this.handleListItemPress(location)}
                   >
                     <Text style={styles.sectionText}>

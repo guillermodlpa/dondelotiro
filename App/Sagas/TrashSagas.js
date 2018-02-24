@@ -4,6 +4,8 @@ import { NavigationActions } from 'react-navigation';
 import Secrets from 'react-native-config'
 import axios from 'axios'
 
+const LIMIT = 3;
+
 export function* requestLocations(action) {
   const { trashTypes, geoPosition } = action
 
@@ -24,7 +26,9 @@ export function* requestLocations(action) {
     .catch(error => error)
 
   if (response.data) {
-    yield put(TrashActions.locationsSuccess(response.data.dist))
+    const results = response.data.dist.filter((el, index) => index < LIMIT);
+
+    yield put(TrashActions.locationsSuccess(results))
   } else {
     yield put(TrashActions.locationsFailure(error))
   }

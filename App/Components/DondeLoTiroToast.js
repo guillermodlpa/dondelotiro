@@ -11,7 +11,11 @@ export default DondeLoTiroToast = props => (
         hideOnPress
     >
         <Text style={{ fontSize: 20 }}>
-            🌱 🌍{"\n"}
+            🌱🌱🌱🌱{"\n"}
+            🌱🌱🌱🌱{"\n"}
+            {"\n"}
+            🌍{"\n"}
+            {"\n"}
             Muchas gracias por contribuir a un mundo más sostenible!
         </Text>
     </Toast>
