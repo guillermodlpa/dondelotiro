@@ -133,7 +133,7 @@ class LaunchScreen extends Component {
               flexDirection: 'row',
               justifyContent: 'center'
             }}>
-              <TrashButton text="Medicinas" image={Images.menuMedicines} selected={this.state.trashTypes.medicies} onPress={() => this.toggle('medicines')} />
+              <TrashButton text="Medicinas" image={Images.menuMedicines} selected={this.state.trashTypes.medicines} onPress={() => this.toggle('medicines')} />
               <TrashButton text="Tóxicos" image={Images.menuToxic} selected={this.state.trashTypes.toxic} onPress={() => this.toggle('toxic')} />
             </View>
           </View>

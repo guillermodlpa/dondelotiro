@@ -8,11 +8,43 @@ const LIMIT = 3;
 
 export function* requestLocations(action) {
   const { trashTypes, geoPosition } = action
+  let containerTypes = [];
+
+  trashTypes.forEach(trashType => {
+    switch (trashType) {
+      case 'furniture':
+      case 'electronics':
+      case 'batteries':
+      case 'glass':
+      case 'oil':
+      case 'toxic':
+        if (containerTypes.indexOf('clean_point') === -1) {
+          containerTypes.push('clean_point')
+        }
+        break
+      case 'dogShit':
+        if (containerTypes.indexOf('dog_shit_trash') === -1) {
+          containerTypes.push('dog_shit_trash')
+        }
+        break
+      case 'batteries':
+        if (containerTypes.indexOf('clean_point') === -1) {
+          containerTypes.push('clean_point')
+        }
+
+        if (containerTypes.indexOf('battery_recycling_point') === -1) {
+          containerTypes.push('battery_recycling_point')
+        }
+        break
+    }
+  })
+
+  console.tron.log(containerTypes)
 
   const bodyFormData = new FormData();
   bodyFormData.append('lat', geoPosition.latitude);
   bodyFormData.append('lon', geoPosition.longitude);
-  bodyFormData.append('trash_types', trashTypes.join(','));
+  bodyFormData.append('trash_types', containerTypes.join(','));
 
   const { response, error } = yield axios.post(
     Secrets.API_URL,
