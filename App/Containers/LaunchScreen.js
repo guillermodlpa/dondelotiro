@@ -9,21 +9,35 @@ import TrashRedux from '../Redux/TrashRedux'
 import styles from './Styles/LaunchScreenStyles'
 
 class LaunchScreen extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.onLocationChanged = this.onLocationChanged.bind(this)
   }
 
-  onLocationChanged (position) {
-    console.tron.log(position)
+  state = {
+    geoPosition: {
+      latitude: null,
+      longitude: null
+    }
+  }
+
+  onLocationChanged(position) {
+    this.setState({
+      ...this.state,
+      geoPosition: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }
+    })
+
     this.props.setGeoPosition(
       position.coords.latitude,
       position.coords.longitude
     )
   }
 
-  componentDidMount () {
+  componentDidMount() {
     requestPermission(PERMISSIONS.LOCATION).then(() => {
       Geolocation.getCurrentPosition(
         this.onLocationChanged,
@@ -37,7 +51,7 @@ class LaunchScreen extends Component {
     })
   }
 
-  render () {
+  render() {
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
@@ -51,7 +65,7 @@ class LaunchScreen extends Component {
             </Text>
           </View>
 
-          <Button block color={'#EF5411'} onPress={() => this.props.navigation.navigate('MapScreen')} title={'Buscar'} />
+          <Button block color={'#EF5411'} onPress={() => this.props.locationsRequest(['batteries'], this.state.geoPosition)} title={'Buscar'} />
 
         </ScrollView>
       </View>
@@ -69,7 +83,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setGeoPosition: (latitude, longitude) => dispatch(TrashRedux.setGeoPosition(latitude, longitude)),
-  requestLocations: (trashTypes, geoPosition) => dispatch(TrashRedux.locationRequest(trashTypes, geoPosition))
+  locationsRequest: (trashTypes, geoPosition) => dispatch(TrashRedux.locationsRequest(trashTypes, geoPosition))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LaunchScreen)
