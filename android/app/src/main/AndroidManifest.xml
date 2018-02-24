@@ -21,7 +21,10 @@
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
-        <intent-filter>
+          <meta-data
+              android:name="com.google.android.geo.API_KEY"
+              android:value="AIzaSyD4a0hjUSHkOaiFl_preQSkIk4TZCu3QV8" />
+          <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
