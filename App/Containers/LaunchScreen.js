@@ -1,11 +1,37 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, Image, View, Button } from 'react-native'
 import { Images } from '../Themes'
+import Geolocation from 'react-native-geolocation-service'
+import requestPermission, { PERMISSIONS } from '../Lib/request-permission'
 
 // Styles
 import styles from './Styles/LaunchScreenStyles'
 
 export default class LaunchScreen extends Component {
+  constructor (props) {
+    super(props)
+
+    this.onLocationChanged = this.onLocationChanged.bind(this)
+  }
+
+  onLocationChanged (position) {
+    console.tron.log(position)
+  }
+
+  componentDidMount () {
+    requestPermission(PERMISSIONS.LOCATION).then(() => {
+      Geolocation.getCurrentPosition(
+        this.onLocationChanged,
+        error => console.error(error),
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 10000
+        }
+      )
+    })
+  }
+
   render () {
     return (
       <View style={styles.mainContainer}>
