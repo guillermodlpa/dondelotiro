@@ -109,6 +109,10 @@ export class MapScreen extends Component {
     this.setState(state => ({ ...state, selectedLocation: null }))
   }
 
+  handleMapLayout = () => {
+    this.map.fitToElements(true);
+  }
+
   renderMap() {
     return (
       <MapView
@@ -122,6 +126,7 @@ export class MapScreen extends Component {
         }}
         ref={ref => this.map = ref}
         showsMyLocationButton
+        onLayout={this.handleMapLayout}
       >
         {this.props.locations.map((location, i) => {
           const active = this.state.selectedLocation === i;
