@@ -24,6 +24,7 @@ const images = {
   batteryMakerImage: require('../Images/battery.png'),
   dogShitMakerImage: require('../Images/caca.png'),
   whoopsMarkerImage: require('../Images/whoops.png'),
-}
+  mapPinImage: require('../Images/map-pin.png'),
+};
 
 export default images

@@ -8,6 +8,12 @@ import ReduxPersist from '../Config/ReduxPersist'
 // Styles
 import styles from './Styles/RootContainerStyles'
 
+const barStyles = {
+  LaunchScreen: 'light-content',
+  MapScreen: 'dark-content',
+  default: 'light-content',
+};
+
 class RootContainer extends Component {
   componentDidMount () {
     // if redux persist is not active fire startup action
@@ -19,7 +25,7 @@ class RootContainer extends Component {
   render () {
     return (
       <View style={styles.applicationView}>
-        <StatusBar barStyle='light-content' />
+        <StatusBar barStyle={barStyles[this.props.screen] || barStyles.default} />
         <ReduxNavigation />
       </View>
     )
@@ -31,4 +37,11 @@ const mapDispatchToProps = (dispatch) => ({
   startup: () => dispatch(StartupActions.startup())
 })
 
-export default connect(null, mapDispatchToProps)(RootContainer)
+const mapStateToProps = (state) => {
+  // console.log('state', state);
+  return {
+    screen: state.nav.routes[state.nav.index].routeName,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RootContainer)

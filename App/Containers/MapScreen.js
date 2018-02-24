@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { ScrollView, Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, Text, Image, View, StyleSheet, TouchableOpacity, TouchableHighlight, StatusBar } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
 import { connect } from 'react-redux'
+import openMap from 'react-native-open-maps';
 
 import { TrashSelectors } from '../Redux/TrashRedux'
+import getRoundedDistance from '../Lib/getRoundedDistance';
 
 import DondeLoTiroButton from '../Components/DondeLoTiroButton';
 import { Images, Metrics, ApplicationStyles } from '../Themes'
@@ -26,13 +28,13 @@ const styles = StyleSheet.create({
   },
   emoji: {
     ...ApplicationStyles.screen.sectionText,
-    fontSize: 35,
+    fontSize: 30,
     textAlign: 'left',
     marginBottom: Metrics.baseMargin,
   },
   map: {
     width: '100%',
-    height: 375,
+    height: 350,
   },
   sectionText: {
     ...ApplicationStyles.screen.sectionText,
@@ -45,32 +47,6 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
 });
-
-function getDistanceFromLatLonInKm(
-  { latitude: lat1, longitude: lon1 },
-  { latitude: lat2, longitude: lon2 }
-) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2-lat1);  // deg2rad below
-  var dLon = deg2rad(lon2-lon1);
-  var a =
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-    Math.sin(dLon/2) * Math.sin(dLon/2)
-    ;
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  var d = R * c; // Distance in km
-  return d;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI/180)
-}
-
-function getRoundedDistance(coord1, coord2) {
-  const distanceInKm = getDistanceFromLatLonInKm(coord1, coord2);
-  return Math.round(distanceInKm * 100) * 10;
-}
 
 const userFriendlyLabels = {
   batteries: 'Baterías',
@@ -114,6 +90,10 @@ export class MapScreen extends Component {
       latitude: location.latitude,
       longitude: location.longitude,
     });
+  }
+
+  handleOpenMapPress = (location) => {
+    openMap({ latitude: location.latitude, longitude: location.longitude });
   }
 
   renderMap() {
@@ -162,18 +142,33 @@ export class MapScreen extends Component {
               const distance = getRoundedDistance(location, this.props.geoPosition);
 
               return (
-                <TouchableOpacity
-                  style={styles.container}
+                <View
                   key={i}
-                  onPress={() => this.handleListItemPress(location)}
+                  style={{
+                    paddingBottom: Metrics.baseMargin,
+                    flex: 1,
+                    flexDirection: 'row',
+                  }}
                 >
-                  <Text style={styles.sectionText}>
-                    {getUserFriendlyLabel(location.containerType)} a {distance} metros!
-                  </Text>
-                  <Text style={styles.subSectionText}>
-                    {location.trashTypes.map(getUserFriendlyLabel).join(', ')}
-                  </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{ flex: 1 }}
+                    onPress={() => this.handleListItemPress(location)}
+                  >
+                    <Text style={styles.sectionText}>
+                      {getUserFriendlyLabel(location.containerType)} a {distance} metros!
+                    </Text>
+                    <Text style={styles.subSectionText}>
+                      {location.trashTypes.map(getUserFriendlyLabel).join(', ')}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => this.handleOpenMapPress(location)}>
+                      <Image
+                        source={Images.mapPinImage}
+                        style={{width: 20, height: 20}}
+                      />
+                    </TouchableOpacity>
+                </View>
               );
             })}
           </ScrollView>
