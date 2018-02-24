@@ -54,15 +54,16 @@ const userFriendlyLabels = {
 const getUserFriendlyLabel = key => (userFriendlyLabels[key] || key);
 
 const markerImages = {
-  clean_point: Images.cleanPointMakerImage,
-  battery_recycling_point: Images.batteryMakerImage,
-  dog_shit_trash: Images.dogShitMakerImage,
-  pharmacy: Images.pharmacyMarkerImage,
-  default: Images.whoopsMarkerImage,
+  clean_point: 'cleanPointMakerImage',
+  battery_recycling_point: 'batteryMakerImage',
+  dog_shit_trash: 'dogShitMakerImage',
+  pharmacy: 'pharmacyMarkerImage',
+  default: 'whoopsMarkerImage',
 };
-const getMarkerImage = (containerType, active) => (
-  `${markerImages[containerType] || markerImages.default}${active ? 'Active' : ''}`
-);
+const getMarkerImage = (containerType, active) => {
+  const imageKey = (markerImages[containerType]|| markerImages.default) + (active ? 'Active' : '');
+  return Images[imageKey];
+};
 
 export class MapScreen extends Component {
   static propTypes = {
