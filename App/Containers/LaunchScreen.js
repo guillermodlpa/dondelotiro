@@ -125,7 +125,7 @@ class LaunchScreen extends Component {
               flexDirection: 'row',
               justifyContent: 'center'
             }}>
-              <TrashButton text="Cristal" image={Images.menuGlass} selected={this.state.trashTypes.glass} onPress={() => this.toggle('glass')} />
+              <TrashButton text="jQuery" image={Images.menuJquery} selected={this.state.trashTypes.glass} onPress={() => this.toggle('glass')} />
               <TrashButton text="Aceite" image={Images.menuOil} selected={this.state.trashTypes.oil} onPress={() => this.toggle('oil')} />
             </View>
 

@@ -57,9 +57,12 @@ const markerImages = {
   clean_point: Images.cleanPointMakerImage,
   battery_recycling_point: Images.batteryMakerImage,
   dog_shit_trash: Images.dogShitMakerImage,
+  pharmacy: Images.pharmacyMarkerImage,
   default: Images.whoopsMarkerImage,
 };
-const getMarkerImage = containerType => (markerImages[containerType] || markerImages.default);
+const getMarkerImage = (containerType, active) => (
+  `${markerImages[containerType] || markerImages.default}${active ? 'Active' : ''}`
+);
 
 export class MapScreen extends Component {
   static propTypes = {
@@ -78,17 +81,18 @@ export class MapScreen extends Component {
       }),
     ).isRequired,
   };
-  static defaultProps = {};
 
   state = {
     selectedLocation: null,
   };
 
   handleListItemPress = (location, index) => {
-    this.map.animateToCoordinate({
-      latitude: location.latitude,
-      longitude: location.longitude,
-    });
+    const middleCoordinates = {
+      latitude: (location.latitude + this.props.geoPosition.latitude) / 2,
+      longitude: (location.longitude + this.props.geoPosition.longitude) / 2,
+    };
+
+    this.map.animateToCoordinate(middleCoordinates);
     this.setState(state => ({ ...state, selectedLocation: index }))
   }
 
@@ -99,6 +103,7 @@ export class MapScreen extends Component {
   handleSelectMarker = (index) => {
     this.setState(state => ({ ...state, selectedLocation: index }))
   }
+
   handleDeelectMarker = () => {
     this.setState(state => ({ ...state, selectedLocation: null }))
   }
@@ -115,25 +120,30 @@ export class MapScreen extends Component {
           longitudeDelta: 0.1,
         }}
         ref={ref => this.map = ref}
-        onMapReady={() => this.map.fitToElements(true)}
+        showsMyLocationButton
       >
-        {this.props.locations.map((location, i) => (
-          <Marker
-            key={i}
-            coordinate={{ latitude: location.latitude, longitude: location.longitude }}
-            title={getUserFriendlyLabel(location.containerType)}
-            description={location.trashTypes.map(getUserFriendlyLabel).join(', ')}
-            onSelect={() => this.handleSelectMarker(i)}
-            onDeselect={() => this.handleDeelectMarker()}
-            zIndex={this.state.selectedLocation === i ? 999 : 0}
-          >
-            <Image
-              resizeMode="contain"
-              style={{width: 60, height: 60}}
-              source={getMarkerImage(location.containerType)}
-            />
-          </Marker>
-        ))}
+        {this.props.locations.map((location, i) => {
+          const active = this.state.selectedLocation === i;
+          const image = getMarkerImage(location.containerType, active);
+
+          return (
+            <Marker
+              key={i}
+              coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+              title={getUserFriendlyLabel(location.containerType)}
+              description={location.trashTypes.map(getUserFriendlyLabel).join(', ')}
+              onSelect={() => this.handleSelectMarker(i)}
+              onDeselect={() => this.handleDeelectMarker()}
+              zIndex={active ? 999 : 0}
+            >
+              <Image
+                resizeMode="contain"
+                style={{width: 60, height: 60}}
+                source={image}
+              />
+            </Marker>
+          );
+        })}
       </MapView>
     )
   }
@@ -143,6 +153,14 @@ export class MapScreen extends Component {
       <View style={styles.mainContainer}>
         <View style={styles.contentContainer}>
           {this.renderMap()}
+
+          {(!this.props.locations || !this.props.locations.length) && (
+            <View style={{ padding: 20 }}>
+              <Text style={styles.sectionText}>
+                Ups. No hay nada cerca!
+              </Text>
+            </View>
+          )}
 
           <ScrollView style={{ padding: 20 }}>
             {this.props.locations.map((location, i) => {

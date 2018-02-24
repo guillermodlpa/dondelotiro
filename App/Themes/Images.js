@@ -22,9 +22,19 @@ const images = {
   closeButton: require('../Images/Icons/close-button.png'),
 
   cleanPointMakerImage: require('../Images/recycling-bin.png'),
-  batteryMakerImage: require('../Images/battery-purple-noun.png'),
+  cleanPointMakerImageActive: require('../Images/recycling-bin-active.png'),
+
+  batteryMakerImage: require('../Images/battery-noun.png'),
+  batteryMakerImageActive: require('../Images/battery-noun-active.png'),
+
   dogShitMakerImage: require('../Images/caca-purple.png'),
+  dogShitMakerImageActive: require('../Images/caca-purple-active.png'),
+
   whoopsMarkerImage: require('../Images/whoops.png'),
+  whoopsMarkerImageActive: require('../Images/whoops-active.png'),
+
+  pharmacyMarkerImage: require('../Images/pharmacy.png'),
+  pharmacyMarkerImageActive: require('../Images/whoops-active.png'),
 
   mapPinImage: require('../Images/map-pin.png'),
 
@@ -33,6 +43,7 @@ const images = {
   menuBattery: require('../Images/menu-battery.png'),
   menuPoop: require('../Images/menu-poop.png'),
   menuGlass: require('../Images/wine-bottle.png'),
+  menuJquery: require('../Images/menu-jquery.png'),
   menuOil: require('../Images/menu-oil.png'),
   menuMedicines: require('../Images/menu-medicines.png'),
   menuToxic: require('../Images/menu-toxic.png'),
