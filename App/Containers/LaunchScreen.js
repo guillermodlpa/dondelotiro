@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Button, Image, ScrollView, Text, View } from 'react-native'
+import { Button, Image, ScrollView, Text, View, ActivityIndicator } from 'react-native'
 import { Images } from '../Themes'
 import Geolocation from 'react-native-geolocation-service'
 import { connect } from 'react-redux'
 import requestPermission, { PERMISSIONS } from '../Lib/request-permission'
 import TrashRedux from '../Redux/TrashRedux'
+import DondeLoTiroButton from '../Components/DondeLoTiroButton'
+import TrashButton from '../Components/TrashButton'
 // Styles
 import styles from './Styles/LaunchScreenStyles'
 
@@ -13,12 +15,20 @@ class LaunchScreen extends Component {
     super(props)
 
     this.onLocationChanged = this.onLocationChanged.bind(this)
+    this.toggle = this.toggle.bind(this)
+    this.requestLocations = this.requestLocations.bind(this)
   }
 
   state = {
     geoPosition: {
       latitude: null,
       longitude: null
+    },
+    trashTypes: {
+      furniture: false,
+      electronics: false,
+      batteries: false,
+      dogShit: false,
     }
   }
 
@@ -35,6 +45,28 @@ class LaunchScreen extends Component {
       position.coords.latitude,
       position.coords.longitude
     )
+  }
+
+  toggle(trashType) {
+    this.setState({
+      ...this.state,
+      trashTypes: {
+        ...this.state.trashTypes,
+        [trashType]: !this.state.trashTypes[trashType]
+      }
+    })
+  }
+
+  requestLocations() {
+    let trashTypes = []
+
+    for (trashType in this.state.trashTypes) {
+      if (this.state.trashTypes[trashType]) {
+        trashTypes.push(trashType)
+      }
+    }
+
+    this.props.locationsRequest(trashTypes, this.state.geoPosition)
   }
 
   componentDidMount() {
@@ -54,20 +86,38 @@ class LaunchScreen extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-        <ScrollView style={styles.container}>
+        <View style={{ flex: 1 }}>
           <View style={styles.centered}>
             <Image source={Images.logo} style={styles.logo} />
           </View>
 
-          <View style={styles.section}>
+          <View>
             <Text style={styles.sectionText}>
               Selecciona los tipos de residuos
             </Text>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}>
+              <TrashButton text="Muebles" icon="rocket" selected={this.state.trashTypes.furniture} onPress={() => this.toggle('furniture')} />
+              <TrashButton text="Electrónica" icon="rocket" selected={this.state.trashTypes.electronics} onPress={() => this.toggle('electronics')} />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}>
+              <TrashButton text="Pilas" icon="rocket" selected={this.state.trashTypes.batteries} onPress={() => this.toggle('batteries')} />
+              <TrashButton text="Caca" icon="rocket" selected={this.state.trashTypes.dogShit} onPress={() => this.toggle('dogShit')} />
+            </View>
           </View>
-
-          <Button block color={'#EF5411'} onPress={() => this.props.locationsRequest(['batteries'], this.state.geoPosition)} title={'Buscar'} />
-
-        </ScrollView>
+        </View>
+        <DondeLoTiroButton onPress={() => this.requestLocations()}>
+          <View style={{ flexDirection: 'column' }}>
+            {(!this.props.isLoading ?
+              <Text style={DondeLoTiroButton.innerTextStyles}>BUSCAR</Text> :
+              <ActivityIndicator size="small" color="#ffffff" />)}
+          </View>
+        </DondeLoTiroButton>
       </View>
     )
   }
