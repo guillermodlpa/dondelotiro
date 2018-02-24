@@ -1,5 +1,6 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
+import { camelizeKeys } from 'humps';
 
 /* ------------- Types and Action Creators ------------- */
 
@@ -49,7 +50,7 @@ export const locationsRequest = state => state.merge({
 })
 
 export const locationsSuccess = (state, { locations }) => state.merge({
-  locations: locations,
+  locations: camelizeKeys(locations),
   isLoading: false,
   isLoaded: true,
   error: null

@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { ScrollView, Text, Image, View, StyleSheet } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
+import { connect } from 'react-redux'
+
+import { TrashSelectors } from '../Redux/TrashRedux'
 
 import DondeLoTiroButton from '../Components/DondeLoTiroButton';
 import { Images, Metrics, ApplicationStyles } from '../Themes'
@@ -29,8 +32,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: 400,
-    marginBottom: Metrics.baseMargin * 2,
+    height: 375,
   },
   sectionText: {
     ...ApplicationStyles.screen.sectionText,
@@ -70,60 +72,67 @@ function getRoundedDistance(coord1, coord2) {
   return Math.round(distanceInKm * 100) * 10;
 }
 
-export default class MapScreen extends Component {
-  static propTypes = {
-    latitude: PropTypes.number,
-    longitude: PropTypes.number,
-  };
-  static defaultProps = {
-    points: [
-      {
-        establishmentType: 'Punto Limpio',
-        thrashType: 'Electrónica',
-        latitude: 40.3478177,
-        longitude: -3.6985403,
-      }
-    ],
-    userCoordinates: {
-      latitude: 40.337828,
-      longitude: -3.68864,
-    },
-  };
+const userFriendlyLabels = {
+  batteries: 'Baterías',
+  furniture: 'Muebles',
+  clean_point: 'Punto Limpio',
+  dog_shit_trash: 'Papelera con bolsas',
+  dog_shit: 'Caca de perro',
+  electronics: 'Electrónica',
+};
+const getUserFriendlyLabel = key => (userFriendlyLabels[key] || key);
 
-  componentDidMount() {
-    this.map.fitToElements(true);
-  }
+const markerImages = {
+  clean_point: Images.cleanPointMakerImage,
+  battery_recycling_point: Images.batteryMakerImage,
+  dog_shit_trash: Images.dogShitMakerImage,
+  default: Images.whoopsMarkerImage,
+};
+const getMarkerImage = containerType => (markerImages[containerType] || markerImages.default);
+
+export class MapScreen extends Component {
+  static propTypes = {
+    geoPosition: PropTypes.shape({
+      latitude: PropTypes.number,
+      longitude: PropTypes.number,
+    }).isRequired,
+
+    locations: PropTypes.arrayOf(
+      PropTypes.shape({
+        trashTypes: PropTypes.arrayOf(PropTypes.string),
+        containerType: PropTypes.string,
+        latitude: PropTypes.number,
+        longitude: PropTypes.number,
+        distance: PropTypes.number,
+      }),
+    ).isRequired,
+  };
+  static defaultProps = {};
 
   renderMap() {
-    const markers = this.props.points.map(point => ({
-      latitude: point.latitude,
-      longitude: point.longitude,
-      title: point.establishmentType,
-      description: point.thrashType,
-    }));
-
     return (
       <MapView
         style={styles.map}
         showsUserLocation
         initialRegion={{
-          latitude: this.props.userCoordinates.latitude,
-          longitude: this.props.userCoordinates.longitude,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
+          latitude: this.props.geoPosition.latitude,
+          longitude: this.props.geoPosition.longitude,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
         }}
         ref={ref => this.map = ref}
+        onMapReady={() => this.map.fitToElements(true)}
       >
-        {markers.map((marker, i) => (
+        {this.props.locations.map((location, i) => (
           <Marker
             key={i}
-            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-            title={marker.title}
-            description={marker.description}
+            coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+            title={getUserFriendlyLabel(location.containerType)}
+            description={location.trashTypes.map(getUserFriendlyLabel).join(', ')}
           >
             <Image
               style={{width: 60, height: 60}}
-              source={Images.cleanPointMakerImage}
+              source={getMarkerImage(location.containerType)}
             />
           </Marker>
         ))}
@@ -137,26 +146,26 @@ export default class MapScreen extends Component {
         <View style={styles.contentContainer}>
           {this.renderMap()}
 
-          <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+          <ScrollView style={{ padding: 20 }}>
             <Text style={styles.emoji}>
               😊 👌
             </Text>
 
-            {this.props.points.map((point, i) => {
-              const distance = getRoundedDistance(point, this.props.userCoordinates);
+            {this.props.locations.map((location, i) => {
+              const distance = getRoundedDistance(location, this.props.geoPosition);
 
               return (
                 <View style={styles.container} key={i}>
                   <Text style={styles.sectionText}>
-                    {point.establishmentType || 'punto'} a {distance} metros!
+                    {getUserFriendlyLabel(location.containerType)} a {distance} metros!
                   </Text>
                   <Text style={styles.subSectionText}>
-                    {point.thrashType}
+                    {location.trashTypes.map(getUserFriendlyLabel).join(', ')}
                   </Text>
                 </View>
               );
             })}
-          </View>
+          </ScrollView>
         </View>
 
         <DondeLoTiroButton
@@ -172,3 +181,10 @@ export default class MapScreen extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  geoPosition: TrashSelectors.getGeoPosition(state),
+  locations: TrashSelectors.getLocations(state),
+});
+
+export default connect(mapStateToProps, {})(MapScreen)

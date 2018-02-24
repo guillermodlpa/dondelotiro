@@ -21,6 +21,9 @@ const images = {
   backButton: require('../Images/Icons/back-button.png'),
   closeButton: require('../Images/Icons/close-button.png'),
   cleanPointMakerImage: require('../Images/cleanpoint.png'),
+  batteryMakerImage: require('../Images/battery.png'),
+  dogShitMakerImage: require('../Images/caca.png'),
+  whoopsMarkerImage: require('../Images/whoops.png'),
 }
 
 export default images
