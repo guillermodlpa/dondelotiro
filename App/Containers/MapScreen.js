@@ -89,11 +89,12 @@ export class MapScreen extends Component {
     selectedLocation: null,
   };
 
-  handleListItemPress = (location) => {
+  handleListItemPress = (location, index) => {
     this.map.animateToCoordinate({
       latitude: location.latitude,
       longitude: location.longitude,
     });
+    this.setState(state => ({ ...state, selectedLocation: index }))
   }
 
   handleOpenMapPress = (location) => {
@@ -164,14 +165,14 @@ export class MapScreen extends Component {
                     flexDirection: 'row',
                     opacity: this.state.selectedLocation == null || this.state.selectedLocation === i
                         ? 1
-                        : 0.6
+                        : 0.4
                   }}
                 >
                   <TouchableOpacity
                     style={{
                       flex: 1,
                     }}
-                    onPress={() => this.handleListItemPress(location)}
+                    onPress={() => this.handleListItemPress(location, i)}
                   >
                     <Text style={styles.sectionText}>
                       {getUserFriendlyLabel(location.containerType)} a {distance} metros!

@@ -99,12 +99,12 @@ class LaunchScreen extends Component {
 
     return (
       <View style={styles.mainContainer}>
-        <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }}>
           <View style={styles.centered}>
             <Image source={Images.logo} style={styles.logo} />
           </View>
 
-          <View>
+          <View style={{ paddingBottom: 40 }}>
             <View style={{
               flexDirection: 'row',
               justifyContent: 'center'
@@ -112,6 +112,7 @@ class LaunchScreen extends Component {
               <TrashButton text="Muebles" image={Images.menuFurniture} selected={this.state.trashTypes.furniture} onPress={() => this.toggle('furniture')} />
               <TrashButton text="Electrónica" image={Images.menuElectronics} selected={this.state.trashTypes.electronics} onPress={() => this.toggle('electronics')} />
             </View>
+
             <View style={{
               flexDirection: 'row',
               justifyContent: 'center'
@@ -119,8 +120,16 @@ class LaunchScreen extends Component {
               <TrashButton text="Pilas" image={Images.menuBattery} selected={this.state.trashTypes.batteries} onPress={() => this.toggle('batteries')} />
               <TrashButton text="Caca" image={Images.menuPoop} selected={this.state.trashTypes.dogShit} onPress={() => this.toggle('dogShit')} />
             </View>
+
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}>
+              <TrashButton text="Cristal" image={Images.menuGlass} selected={this.state.trashTypes.glass} onPress={() => this.toggle('glass')} />
+              <TrashButton text="Aceite" image={Images.menuOil} selected={this.state.trashTypes.oil} onPress={() => this.toggle('oil')} />
+            </View>
           </View>
-        </View>
+        </ScrollView>
 
         <DondeLoTiroButton
           onPress={() => this.requestLocations()}

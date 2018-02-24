@@ -5,7 +5,7 @@ import Toast from 'react-native-root-toast';
 export default DondeLoTiroToast = props => (
     <Toast
         visible
-        position={50}
+        position={Toast.positions.CENTER}
         shadow={false}
         animation={false}
         hideOnPress

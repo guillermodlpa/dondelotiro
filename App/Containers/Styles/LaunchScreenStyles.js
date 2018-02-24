@@ -5,7 +5,7 @@ export default StyleSheet.create({
   ...ApplicationStyles.screen,
 
   logo: {
-    marginTop: Metrics.doubleSection,
+    marginTop: 30,
     height: Metrics.images.logo,
     width: Metrics.images.logo,
     resizeMode: 'contain'
