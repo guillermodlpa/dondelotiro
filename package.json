@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "apisauce": "^0.14.2",
+    "axios": "^0.18.0",
     "format-json": "^1.0.3",
     "humps": "^2.0.1",
     "identity-obj-proxy": "^3.0.0",
