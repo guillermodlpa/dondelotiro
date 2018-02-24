@@ -9,7 +9,11 @@ const ApplicationStyles = {
   screen: {
     mainContainer: {
       flex: 1,
+      flexDirection: 'column',
       backgroundColor: 'rgb(46, 29, 50)',
+    },
+    contentContainer: {
+      flex: 1,
     },
     backgroundImage: {
       position: 'absolute',

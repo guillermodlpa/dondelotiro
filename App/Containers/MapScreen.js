@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { ScrollView, Text, Image, View, Button, StyleSheet } from 'react-native'
+import { ScrollView, Text, Image, View, StyleSheet } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
 
+import DondeLoTiroButton from '../Components/DondeLoTiroButton';
 import { Images, Metrics, ApplicationStyles } from '../Themes'
-
 
 // Styles
 const styles = StyleSheet.create({
@@ -104,54 +104,59 @@ export default class MapScreen extends Component {
 
     return (
       <View style={styles.mainContainer}>
-        <MapView
-          style={styles.map}
-          showsUserLocation
-          initialRegion={{
-            latitude: this.props.userCoordinates.latitude,
-            longitude: this.props.userCoordinates.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
-          }}
-          ref={ref => this.map = ref}
-        >
-          {markers.map((marker, i) => (
-            <Marker
-              key={i}
-              coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-              title={marker.title}
-              description={marker.description}
-            />
-          ))}
-        </MapView>
+        <View style={styles.contentContainer}>
+          <MapView
+            style={styles.map}
+            showsUserLocation
+            initialRegion={{
+              latitude: this.props.userCoordinates.latitude,
+              longitude: this.props.userCoordinates.longitude,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            }}
+            ref={ref => this.map = ref}
+          >
+            {markers.map((marker, i) => (
+              <Marker
+                key={i}
+                coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                title={marker.title}
+                description={marker.description}
+              />
+            ))}
+          </MapView>
 
-        <View style={{ paddingLeft: 20, paddingRight: 20 }}>
-          <Text style={styles.emoji}>
-            😊 👌
-          </Text>
+          <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+            <Text style={styles.emoji}>
+              😊 👌
+            </Text>
 
-          {this.props.points.map((point, i) => {
-            const distance = getRoundedDistance(point, this.props.userCoordinates);
+            {this.props.points.map((point, i) => {
+              const distance = getRoundedDistance(point, this.props.userCoordinates);
 
-            return (
-              <View style={styles.container} key={i}>
-                <Text style={styles.sectionText}>
-                  {point.establishmentType || 'punto'} a {distance} metros!
-                </Text>
-                <Text style={styles.subSectionText}>
-                  {point.thrashType}
-                </Text>
-              </View>
-            );
-          })}
-
-          <Button
-            block
-            style={styles.button}
-            onPress={() => this.props.navigation.goBack()}
-            title={'Back'}
-          />
+              return (
+                <View style={styles.container} key={i}>
+                  <Text style={styles.sectionText}>
+                    {point.establishmentType || 'punto'} a {distance} metros!
+                  </Text>
+                  <Text style={styles.subSectionText}>
+                    {point.thrashType}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
         </View>
+
+        <DondeLoTiroButton
+          secondary
+          block
+          onPress={() => this.props.navigation.goBack()}
+        >
+          <Text style={DondeLoTiroButton.innerTextStyles}>
+            HECHO
+          </Text>
+        </DondeLoTiroButton>
       </View>
     )
   }
