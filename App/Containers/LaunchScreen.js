@@ -128,6 +128,14 @@ class LaunchScreen extends Component {
               <TrashButton text="Cristal" image={Images.menuGlass} selected={this.state.trashTypes.glass} onPress={() => this.toggle('glass')} />
               <TrashButton text="Aceite" image={Images.menuOil} selected={this.state.trashTypes.oil} onPress={() => this.toggle('oil')} />
             </View>
+
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}>
+              <TrashButton text="Medicinas" image={Images.menuMedicines} selected={this.state.trashTypes.medicies} onPress={() => this.toggle('medicines')} />
+              <TrashButton text="Tóxicos" image={Images.menuToxic} selected={this.state.trashTypes.toxic} onPress={() => this.toggle('toxic')} />
+            </View>
           </View>
         </ScrollView>
 

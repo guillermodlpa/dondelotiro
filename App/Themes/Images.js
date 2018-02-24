@@ -34,6 +34,8 @@ const images = {
   menuPoop: require('../Images/menu-poop.png'),
   menuGlass: require('../Images/wine-bottle.png'),
   menuOil: require('../Images/menu-oil.png'),
+  menuMedicines: require('../Images/menu-medicines.png'),
+  menuToxic: require('../Images/menu-toxic.png'),
 };
 
 export default images
